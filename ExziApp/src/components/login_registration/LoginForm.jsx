@@ -1,7 +1,7 @@
 import { Field, Input } from "@headlessui/react"
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
-import { UserContext } from "../../contexts/UserContext.js";
+import { UserContext } from "../../contexts/UserContext.jsx";
 
 const LoginForm = () => {
 
@@ -41,7 +41,7 @@ const LoginForm = () => {
                 };
 
                 setUser(authenticatedUser);
-                navigate('/app');
+                navigate('/dashboard');
             } else {
                 setError(data.message || "Login failed");
             }
