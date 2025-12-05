@@ -1,31 +1,19 @@
-import express from 'express'
-import cors from 'cors'
-import pg from 'pg'
-import dotenv from 'dotenv'
-import bcrypt from 'bcrypt'
-
-dotenv.config()
+import express from 'express';
+import cors from 'cors';
+import pool from './db.js';
+import bcrypt from 'bcrypt';
+import incomeCategoriesRoutes from './routes/incomeCategories.js';
+import expenseCategoriesRoutes from './routes/expenseCategories.js';
+import { authenticateUser } from './middleware.js';
 
 const app = express();
-
-const { Pool } = pg
-
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-    options: `-c search_path=${process.env.DB_SCHEMA}`
-})
 const PORT = 3001;
+
 app.use(cors());
 app.use(express.json());
 
-
-app.get('/', (req, res) => {
-    res.send("Hello from your Express backend!")
-});
+app.use('/api/income-categories', authenticateUser, incomeCategoriesRoutes);
+app.use('/api/expense-categories', authenticateUser, expenseCategoriesRoutes);
 
 app.get('/api/users', async (req, res) => {
     try {
