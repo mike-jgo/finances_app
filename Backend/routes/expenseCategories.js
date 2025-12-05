@@ -6,8 +6,6 @@ const router = Router();
 router.get('/', async (req, res) => {
     try {
         const userId = req.user.id;
-        // Assuming expense_category pk is 'expcatID' and foreign key in expenses is 'exp_cat'
-        // Matching the naming convention from incomeCategories.js
         const query = `
       SELECT 
         ec.expcatid AS id,
