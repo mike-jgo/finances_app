@@ -2,7 +2,7 @@
 import Header from './Header.jsx'
 import BaseForm from "../forms_general/BaseForm.jsx"
 import BaseDialog from '../dialogs/BaseDialog.jsx'
-import { Outlet , useMatches } from 'react-router'
+import { Outlet, useMatches } from 'react-router'
 import { useState, createContext, useMemo } from 'react'
 import { ModalContext } from '../../contexts/ModalContext.js'
 import { DialogContext } from '../../contexts/DialogContext.js'
@@ -15,6 +15,7 @@ const PageContent = () => {
     const [headerButton, setHeaderButton] = useState(null)
     const [modalType, setModalType] = useState(null) // null -> no modal is to be shown
     const [modalHeader, setModalHeader] = useState(null)
+    const [modalOnConfirm, setModalOnConfirm] = useState(null)
     const [dialogType, setDialogType] = useState(null)
 
     const dialogContext = useMemo(() => ({
@@ -23,33 +24,35 @@ const PageContent = () => {
 
     const modalContext = useMemo(() => ({
         setModalType,
-        setModalHeader
-    }), [setModalType, setModalHeader])
+        setModalHeader,
+        setModalOnConfirm
+    }), [setModalType, setModalHeader, setModalOnConfirm])
 
     const closeModal = () => {
         setModalType(null)
+        setModalOnConfirm(null)
     }
 
     return (
         <DialogContext.Provider value={dialogContext}>
             <ModalContext.Provider value={modalContext}>
-            <div className="h-full grid grid-rows-12 grid-cols-12 w-full">
-                <Header className="row-start-[1] row-end-[3] col-start-[1] col-end-[13]" main_msg={main_msg} sub_msg={sub_msg} button={headerButton}></Header>
-                <div className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]">
-                    <Outlet context={{setHeaderButton, setModalType, setModalHeader}} className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]"/>
+                <div className="h-full grid grid-rows-12 grid-cols-12 w-full">
+                    <Header className="row-start-[1] row-end-[3] col-start-[1] col-end-[13]" main_msg={main_msg} sub_msg={sub_msg} button={headerButton}></Header>
+                    <div className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]">
+                        <Outlet context={{ setHeaderButton, setModalType, setModalHeader, setModalOnConfirm }} className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]" />
+                    </div>
+                    {
+                        modalType && (
+                            <BaseForm onClose={closeModal} display={modalType} displayName={modalHeader} onConfirm={modalOnConfirm}>
+                                {modalType}
+                            </BaseForm>
+                        )
+                    }
+                    {dialogType}
                 </div>
-                {
-                    modalType && (
-                        <BaseForm onClose={closeModal} display={modalType} displayName={modalHeader}>
-                            {modalType}
-                        </BaseForm>
-                    )
-                }
-                {dialogType}
-            </div>
             </ModalContext.Provider>
         </DialogContext.Provider>
-        
+
     )
 }
 

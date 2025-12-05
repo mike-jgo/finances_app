@@ -6,24 +6,26 @@ import CategoryForm from "../forms_general/CategoryForm.jsx"
 import { DialogContext } from '../../contexts/DialogContext.js'
 import BaseDialog from '../dialogs/BaseDialog.jsx'
 
-const BaseMenu = ({ category_type, category_obj }) => {
+const BaseMenu = ({ category_type, category_obj, onEdit, onDelete }) => {
 
-    const { setModalType, setModalHeader } = useContext(ModalContext)
+    const { setModalType, setModalHeader, setModalOnConfirm } = useContext(ModalContext)
     const { setDialogType } = useContext(DialogContext)
 
     const openModal = useCallback(() => {
-        setModalType(<CategoryForm type={category_type} mode="update" name_label="Enter new name" icon_pick_label="Select new icon" />)
+        setModalType(<CategoryForm type={category_type} mode="update" name_label="Enter new name" icon_pick_label="Select new icon" initialName={category_obj.categoryName || category_obj.title} initialIcon={category_obj.emoji || category_obj.icon} initialHasLimit={category_obj.has_limit} initialLimit={category_obj.exp_limit} />)
         setModalHeader("Edit name and icon")
-    }, [setModalHeader, setModalType])
+        setModalOnConfirm(() => (formData) => onEdit(category_obj.id, formData))
+    }, [setModalHeader, setModalType, setModalOnConfirm, category_type, category_obj, onEdit])
 
     const openDeleteDialog = useCallback(() => {
-        setDialogType(<BaseDialog dialog_type="Warning" icon="⚠️" message="Are you sure you want to delete this category?" onClose={() => setDialogType(null)} />)
-    }, [setDialogType])
+        setDialogType(<BaseDialog dialog_type="Warning" icon="⚠️" message="Are you sure you want to delete this category?" onClose={() => setDialogType(null)} confirmButton={() => onDelete(category_obj.id)} cancelButton={() => setDialogType(null)} />)
+    }, [setDialogType, onDelete, category_obj])
 
     const openToggleBudgetForm = useCallback(() => {
-        setModalType(<CategoryForm type={category_type} mode="budget_toggle" />)
+        setModalType(<CategoryForm type={category_type} mode="budget_toggle" initialName={category_obj.categoryName || category_obj.title} initialIcon={category_obj.emoji || category_obj.icon} initialHasLimit={category_obj.has_limit} initialLimit={category_obj.exp_limit} />)
         setModalHeader("Toggle budget limit")
-    }, [setModalType, setModalHeader])
+        setModalOnConfirm(() => (formData) => onEdit(category_obj.id, formData))
+    }, [setModalType, setModalHeader, setModalOnConfirm, category_type, category_obj, onEdit])
 
     const renderOptions = () => {
         switch (category_type) {

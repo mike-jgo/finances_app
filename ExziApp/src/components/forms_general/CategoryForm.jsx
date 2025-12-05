@@ -44,7 +44,7 @@ const emojiIcons = [
 
 
 
-const CategoryForm = ({ type, mode, name_label, icon_pick_label }) => {
+const CategoryForm = ({ type, mode, name_label, icon_pick_label, initialName, initialIcon, initialHasLimit, initialLimit }) => {
     const [currIcon, selectIcon] = useState(emojiIcons[0])
 
     const renderSection = () => {
@@ -71,23 +71,27 @@ const CategoryForm = ({ type, mode, name_label, icon_pick_label }) => {
                 if (type === 'income') {
                     return (
                         <>
-                            <CategoryNameField name_label="Enter name" />
-                            <IconPicker type="income" icon_pick_label="Select icon" />
+                            <CategoryNameField name_label="Enter name" defaultValue={initialName} />
+                            <IconPicker type="income" icon_pick_label="Select icon" defaultIcon={initialIcon} />
                         </>
                     )
                 }
                 else {
                     return (
                         <>
-                            <CategoryNameField name_label="Enter name" />
-                            <IconPicker type="income" icon_pick_label="Select icon" />
+                            <CategoryNameField name_label="Enter name" defaultValue={initialName} />
+                            <IconPicker type="income" icon_pick_label="Select icon" defaultIcon={initialIcon} />
+                            <input type="hidden" name="has_limit" value={initialHasLimit} />
+                            <input type="hidden" name="exp_limit" value={initialLimit} />
                         </>
                     )
                 }
             case 'budget_toggle':
                 return (
                     <>
-                        <BudgetSetter budget_set_label="Set budget limit?" budget_enter_amount="Enter amount" />
+                        <BudgetSetter budget_set_label="Set budget limit?" budget_enter_amount="Enter amount" defaultHasLimit={initialHasLimit} defaultLimit={initialLimit} />
+                        <input type="hidden" name="title" value={initialName} />
+                        <input type="hidden" name="icon" value={initialIcon} />
                     </>
                 )
         }
