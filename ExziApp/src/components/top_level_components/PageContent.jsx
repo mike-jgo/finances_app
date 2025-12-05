@@ -2,10 +2,10 @@
 import Header from './Header.jsx'
 import BaseForm from "../forms_general/BaseForm.jsx"
 import BaseDialog from '../dialogs/BaseDialog.jsx'
-import { Outlet , useMatches } from 'react-router'
+import { Outlet, useMatches } from 'react-router'
 import { useState, createContext, useMemo } from 'react'
-import { ModalContext } from '../../contexts/ModalContext.js'
-import { DialogContext } from '../../contexts/DialogContext.js'
+import { ModalContext } from '../../contexts/ModalContext.jsx'
+import { DialogContext } from '../../contexts/DialogContext.jsx'
 
 const PageContent = () => {
     const matches = useMatches();
@@ -33,23 +33,23 @@ const PageContent = () => {
     return (
         <DialogContext.Provider value={dialogContext}>
             <ModalContext.Provider value={modalContext}>
-            <div className="h-full grid grid-rows-12 grid-cols-12 w-full">
-                <Header className="row-start-[1] row-end-[3] col-start-[1] col-end-[13]" main_msg={main_msg} sub_msg={sub_msg} button={headerButton}></Header>
-                <div className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]">
-                    <Outlet context={{setHeaderButton, setModalType, setModalHeader}} className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]"/>
+                <div className="h-full grid grid-rows-12 grid-cols-12 w-full">
+                    <Header className="row-start-[1] row-end-[3] col-start-[1] col-end-[13]" main_msg={main_msg} sub_msg={sub_msg} button={headerButton}></Header>
+                    <div className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]">
+                        <Outlet context={{ setHeaderButton, setModalType, setModalHeader }} className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]" />
+                    </div>
+                    {
+                        modalType && (
+                            <BaseForm onClose={closeModal} display={modalType} displayName={modalHeader}>
+                                {modalType}
+                            </BaseForm>
+                        )
+                    }
+                    {dialogType}
                 </div>
-                {
-                    modalType && (
-                        <BaseForm onClose={closeModal} display={modalType} displayName={modalHeader}>
-                            {modalType}
-                        </BaseForm>
-                    )
-                }
-                {dialogType}
-            </div>
             </ModalContext.Provider>
         </DialogContext.Provider>
-        
+
     )
 }
 

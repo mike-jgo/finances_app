@@ -12,7 +12,7 @@ import ExpenseCategories from './pages/ExpenseCategories.jsx';
 import Transactions from './pages/Transactions.jsx';
 import LoginPage from './components/login_registration/LoginPage.jsx';
 import LoginContent from './LoginContent.jsx';
-import { AuthProvider } from './contexts/AuthContext.js';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 
 const router = createBrowserRouter([
   {

@@ -1,9 +1,9 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { VscKebabVertical } from 'react-icons/vsc'
 import { useContext, useCallback } from 'react'
-import { ModalContext } from '../../contexts/ModalContext'
+import { ModalContext } from '../../contexts/ModalContext.jsx'
 import CategoryForm from "../forms_general/CategoryForm.jsx"
-import { DialogContext } from '../../contexts/DialogContext.js'
+import { DialogContext } from '../../contexts/DialogContext.jsx'
 import BaseDialog from '../dialogs/BaseDialog.jsx'
 
 const BaseMenu = ({ category_type, category_obj }) => {
