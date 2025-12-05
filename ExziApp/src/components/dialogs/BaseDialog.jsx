@@ -17,8 +17,8 @@ const BaseDialog = ({ dialog_type, icon, confirmButton, cancelButton, message, o
                     <p>{message}</p>
                 </div>
                 <div className="flex justify-center gap-4">
-                    <button className="w-1/4 p-2 bg-white text-black rounded-sm">Confirm</button>
-                    <button className="w-1/4 p-2 bg-white text-black rounded-sm">Cancel</button>
+                    <button className="w-1/4 p-2 bg-white text-black rounded-sm" onClick={confirmButton}>Confirm</button>
+                    <button className="w-1/4 p-2 bg-white text-black rounded-sm" onClick={cancelButton}>Cancel</button>
                 </div>
             </div>
         </div>
