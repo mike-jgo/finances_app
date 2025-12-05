@@ -26,39 +26,17 @@ const IncomeCategories = () => {
   }, [setHeaderButton, openAddModal])
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/income-categories?userId=1')
-
-        if (!response.ok) {
-          console.error('Failed to fetch income categories')
-          return
-        }
-
-        const data = await response.json()
-        const mappedCategories = data.map((category) => ({
-          id: category.id ?? category.category_id ?? category.title,
-          categoryName: category.title,
-          emoji: category.icon,
-          total_income: category.amount,
-        }))
-
-        setCategories(mappedCategories)
-      } catch (error) {
-        console.error('Error fetching income categories:', error)
-      }
-    }
-
-    fetchCategories()
-  }, [])
-
-  useEffect(() => {
     if (!user?.id) return
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/income_categories?userId=${user.id}`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        const headers = {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          'x-user-id': user.id,
+        }
+
+        const response = await fetch(`http://localhost:3001/api/income-categories/${user.id}`, {
+          headers,
         })
 
         if (!response.ok) {
@@ -66,7 +44,14 @@ const IncomeCategories = () => {
         }
 
         const data = await response.json()
-        setCategories(data || [])
+        const mappedCategories = (data || []).map((category) => ({
+          id: category.id,
+          categoryName: category.title,
+          emoji: category.icon,
+          total_income: category.amount,
+        }))
+
+        setCategories(mappedCategories)
       } catch (error) {
         console.error("Unable to load income categories", error)
       }
