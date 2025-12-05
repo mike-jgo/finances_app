@@ -12,7 +12,8 @@ import ExpenseCategories from './pages/ExpenseCategories.jsx';
 import Transactions from './pages/Transactions.jsx';
 import LoginPage from './components/login_registration/LoginPage.jsx';
 import LoginContent from './LoginContent.jsx';
-import { UserProvider } from './contexts/UserContext.js';
+import { UserProvider } from './contexts/UserContext.jsx';
+import ProtectedRoute from './components/utils/ProtectedRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,14 +27,13 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/app',
-    element: <App />,
+    element: <ProtectedRoute><App /></ProtectedRoute>,
     children: [
       {
         element: <PageContent />,
         children: [
           {
-            index: true,
+            path: 'dashboard',
             handle: {
               main_msg: "Good morning, Errol!",
               sub_msg: "Here's your financial overview.",
