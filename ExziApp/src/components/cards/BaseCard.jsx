@@ -2,7 +2,7 @@
 import { VscKebabVertical } from "react-icons/vsc"
 import BaseMenu from "../menus/BaseMenu.jsx"
 
-const BaseCard = ({ type, income_cat, expense_cat, display_mode }) => {
+const BaseCard = ({ type, income_cat, expense_cat, display_mode, onEdit, onDelete }) => {
     const categoryObject = income_cat ?? expense_cat
 
     const display = {
@@ -76,7 +76,7 @@ const BaseCard = ({ type, income_cat, expense_cat, display_mode }) => {
                     </div>
                     <p>{display.name}</p>
                 </div>
-                <BaseMenu button={VscKebabVertical} category_type={type} category_obj={categoryObject} />
+                <BaseMenu button={VscKebabVertical} category_type={type} category_obj={categoryObject} onEdit={onEdit} onDelete={onDelete} />
             </div>
             <div>
                 {renderIncomeInformation(type, display_mode)}
