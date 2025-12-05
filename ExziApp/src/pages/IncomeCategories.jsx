@@ -26,47 +26,37 @@ const IncomeCategories = () => {
   }, [setHeaderButton, openAddModal])
 
   useEffect(() => {
+    if (!user?.id) return
+
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/income-categories?userId=1')
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001"
+
+        const headers = {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(user?.id ? { "x-user-id": String(user.id) } : {}),
+        }
+
+        const response = await fetch(`${apiBaseUrl}/api/income-categories/${user.id}`, {
+          headers,
+        })
 
         if (!response.ok) {
-          console.error('Failed to fetch income categories')
-          return
+          const errorBody = await response.text()
+          throw new Error(
+            `Failed to fetch income categories (status ${response.status}): ${errorBody || response.statusText}`
+          )
         }
 
         const data = await response.json()
-        const mappedCategories = data.map((category) => ({
-          id: category.id ?? category.category_id ?? category.title,
+        const mappedCategories = (data || []).map((category) => ({
+          id: category.id,
           categoryName: category.title,
           emoji: category.icon,
           total_income: category.amount,
         }))
 
         setCategories(mappedCategories)
-      } catch (error) {
-        console.error('Error fetching income categories:', error)
-      }
-    }
-
-    fetchCategories()
-  }, [])
-
-  useEffect(() => {
-    if (!user?.id) return
-
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/api/income_categories?userId=${user.id}`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch income categories")
-        }
-
-        const data = await response.json()
-        setCategories(data || [])
       } catch (error) {
         console.error("Unable to load income categories", error)
       }
