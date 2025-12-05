@@ -1,7 +1,7 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import TransactionForm from '../forms_general/TransactionForm.jsx'
 
-const AddTransactionPopup = () => {
+const AddTransactionPopup = ({ incomeCategories, expenseCategories }) => {
     return (
         <TabGroup defaultIndex={0} as="div" className="flex flex-col justify-between w-full h-full p-2">
             <TabList as="div" className="w-full bg-[#101010] p-1 rounded-lg h-[10%]">
@@ -11,10 +11,10 @@ const AddTransactionPopup = () => {
             </TabList>
             <TabPanels as="div" className="h-[90%]">
                 <TabPanel as="div" className="h-full">
-                    <TransactionForm transaction_type="income" inc_cat_label="Select category" />
+                    <TransactionForm transaction_type="income" inc_cat_label="Select category" categories={incomeCategories} />
                 </TabPanel>
                 <TabPanel as="div" className="h-full">
-                    <TransactionForm transaction_type="expense" inc_cat_label="Select source of funds" exp_dst_label="Select category" />
+                    <TransactionForm transaction_type="expense" inc_cat_label="Select source of funds" exp_dst_label="Select category" categories={incomeCategories} expenseCategories={expenseCategories} />
                 </TabPanel>
                 <TabPanel as="div" className="h-full">
                     <TransactionForm transaction_type="transfer" transfer_dst_label="To" transfer_src_label="From" />
