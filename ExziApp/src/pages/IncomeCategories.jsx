@@ -1,12 +1,12 @@
 import { useEffect, useCallback, useState } from "react"
 import { useOutletContext } from "react-router"
 import Button from "../components/Button"
-import { ModalContext } from "../contexts/ModalContext"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import BaseCard from "../components/cards/BaseCard.jsx"
+import { useAuth } from "../contexts/AuthContext"
 
 
-const categories = [
+const fallbackCategories = [
   {
     id: 1,
     categoryName: 'Salary',
@@ -67,7 +67,9 @@ const categories = [
 
 const IncomeCategories = () => {
   const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+  const { user, token } = useAuth()
   const [displayMode, setDisplayMode] = useState("monthly")
+  const [categories, setCategories] = useState(fallbackCategories)
 
   const openAddModal = useCallback(() => {
     setModalType(<CategoryForm type="income" mode="add" name_label="Enter name" icon_pick_label="Select icon" />)
@@ -86,6 +88,29 @@ const IncomeCategories = () => {
   const toggleMode = useCallback((mode) => {
     setDisplayMode(mode)
   }, [setDisplayMode])
+
+  useEffect(() => {
+    if (!user?.id) return
+
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/income_categories?userId=${user.id}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch income categories")
+        }
+
+        const data = await response.json()
+        setCategories(data || [])
+      } catch (error) {
+        console.error("Unable to load income categories", error)
+      }
+    }
+
+    fetchCategories()
+  }, [token, user?.id])
 
   return (
     <main className="flex flex-wrap gap-6 p-4">

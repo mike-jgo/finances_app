@@ -1,10 +1,12 @@
 import { Field, Input } from "@headlessui/react"
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LoginForm = () => {
 
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -31,8 +33,7 @@ const LoginForm = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // In a real app, store the token here (e.g., localStorage)
-                // localStorage.setItem('token', data.token);
+                login(data.user, data.token);
                 navigate('/app');
             } else {
                 setError(data.message || "Login failed");
