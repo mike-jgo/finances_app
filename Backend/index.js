@@ -122,6 +122,32 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+app.get('/api/income-categories/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const parsedUserId = Number(userId);
+
+    if (!Number.isInteger(parsedUserId) || parsedUserId <= 0) {
+        return res.status(400).json({ message: 'Invalid user id' });
+    }
+
+    const requestingUserId = req.header('x-user-id');
+    if (requestingUserId && Number(requestingUserId) !== parsedUserId) {
+        return res.status(403).json({ message: 'Not authorized to view these categories' });
+    }
+
+    try {
+        const { rows } = await pool.query(
+            'SELECT id, title, icon, amount FROM income_category WHERE user_id = $1 ORDER BY id',
+            [parsedUserId]
+        );
+
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error('Error fetching income categories', err);
+        res.status(500).json({ message: 'Server error fetching income categories' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
 });
