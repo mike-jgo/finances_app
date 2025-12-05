@@ -20,8 +20,8 @@ const darkTheme = createTheme({
   },
 });
 
-export default function TranscDatePicker() {
-  const [selectedDate, setSelectedDate] = useState(null);
+export default function TranscDatePicker({ name }) {
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   // 3. The parent Field is flex-col. 'grow' makes this component
   //    fill the remaining vertical space.
@@ -29,6 +29,7 @@ export default function TranscDatePicker() {
     <Popover className="relative grow">
       {({ close }) => (
         <>
+          <input type="hidden" name={name} value={selectedDate ? selectedDate.toISOString() : ''} />
           {/* 4. This is your custom button. 'h-full' makes it fill
                the 'grow' Popover container. */}
           <PopoverButton className="flex items-center justify-between w-full h-full px-3 py-2 text-left text-white bg-transparent border border-[#646464] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
