@@ -3,11 +3,13 @@ import TranscDatePicker from '../form_components/TranscDatePicker'
 import { useState } from 'react'
 import CategorySelector from '../form_components/CategorySelector'
 
-export const IncomeSourceField = ({ inc_cat_label, exp_src_label, transaction_type, categories }) => {
+export const IncomeSourceField = ({ inc_cat_label, exp_src_label, transaction_type, categories, name }) => {
+    const fieldName = name || 'inc_cat'
+
     return (
         <Field as="div" className={`${transaction_type === 'expense' ? 'w-1/3' : 'w-1/2'} h-full flex flex-col`}>
             <label>{inc_cat_label || exp_src_label}</label>
-            <CategorySelector categoryList={categories} name="inc_cat" />
+            <CategorySelector categoryList={categories} name={fieldName} />
         </Field>
     )
 }
