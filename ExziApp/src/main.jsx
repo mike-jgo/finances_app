@@ -12,6 +12,7 @@ import ExpenseCategories from './pages/ExpenseCategories.jsx';
 import Transactions from './pages/Transactions.jsx';
 import LoginPage from './components/login_registration/LoginPage.jsx';
 import LoginContent from './LoginContent.jsx';
+import { UserProvider } from './contexts/UserContext.js';
 
 const router = createBrowserRouter([
   {
@@ -86,6 +87,8 @@ const router = createBrowserRouter([
 ])
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   </StrictMode>,
 )
