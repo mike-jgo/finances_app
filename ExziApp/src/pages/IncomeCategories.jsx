@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router"
 import Button from "../components/Button"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import BaseCard from "../components/cards/BaseCard.jsx"
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext.jsx"
 
 const IncomeCategories = () => {
   const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
