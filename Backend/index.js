@@ -4,6 +4,9 @@ import pool from './db.js';
 import bcrypt from 'bcrypt';
 import incomeCategoriesRoutes from './routes/incomeCategories.js';
 import expenseCategoriesRoutes from './routes/expenseCategories.js';
+import incomeRoutes from './routes/income.js';
+import expenseRoutes from './routes/expense.js';
+import analyticsRoutes from './routes/analytics.js';
 import { authenticateUser } from './middleware.js';
 
 const app = express();
@@ -14,6 +17,9 @@ app.use(express.json());
 
 app.use('/api/income-categories', authenticateUser, incomeCategoriesRoutes);
 app.use('/api/expense-categories', authenticateUser, expenseCategoriesRoutes);
+app.use('/api/income', authenticateUser, incomeRoutes);
+app.use('/api/expenses', authenticateUser, expenseRoutes);
+app.use('/api/analytics', authenticateUser, analyticsRoutes);
 
 app.get('/api/users', async (req, res) => {
     try {
