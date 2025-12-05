@@ -1,7 +1,16 @@
 import React from "react"
-import { NavLink } from "react-router"
+import { NavLink, useNavigate } from "react-router"
+import { useAuth } from "../../contexts/AuthContext"
 
 const Sidebar = () => {
+    const navigate = useNavigate()
+    const { logout } = useAuth()
+
+    const handleLogout = () => {
+        logout()
+        navigate('/')
+    }
+
     return (
         <div className="bg-[#101a1e] h-full p-6 flex flex-col gap-4">
             <h1>⚡ExziApp</h1>
@@ -34,6 +43,12 @@ const Sidebar = () => {
                     </li>
                 </ul>
             </nav>
+            <button
+                onClick={handleLogout}
+                className="rounded-md transition-colors duration-200 p-4 text-left bg-[#18272e] hover:bg-[#22343d]"
+            >
+                🚪 Logout
+            </button>
         </div>
     )
 }

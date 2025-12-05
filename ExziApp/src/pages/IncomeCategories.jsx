@@ -3,9 +3,11 @@ import { useOutletContext } from "react-router"
 import Button from "../components/Button"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import BaseCard from "../components/cards/BaseCard.jsx"
+import { useAuth } from "../contexts/AuthContext"
 
 const IncomeCategories = () => {
   const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+  const { user, token } = useAuth()
   const [displayMode, setDisplayMode] = useState("monthly")
   const [categories, setCategories] = useState([])
 
@@ -49,6 +51,29 @@ const IncomeCategories = () => {
 
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    if (!user?.id) return
+
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/income_categories?userId=${user.id}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch income categories")
+        }
+
+        const data = await response.json()
+        setCategories(data || [])
+      } catch (error) {
+        console.error("Unable to load income categories", error)
+      }
+    }
+
+    fetchCategories()
+  }, [token, user?.id])
 
   return (
     <main className="flex flex-wrap gap-6 p-4">
